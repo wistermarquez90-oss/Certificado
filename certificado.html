@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Great+Vibes&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- 1. Librería html2pdf.js -->
+<!-- Librería html2pdf.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -23,32 +23,68 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { string-set: doctitle ""; }
+  body { 
+    string-set: doctitle ""; 
+    background-color: #e0e0e0; /* Fondo gris para resaltar el certificado en la pantalla */
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
 
   @page { size: A4 landscape; margin: 0; }
   @page :first { margin: 0; }
 
-  /* ---------- Botón de Descarga Flotante ---------- */
-  .btn-descarga {
+  /* ---------- Panel de Controles Flotante (NO sale en el PDF) ---------- */
+  .panel-controles {
     position: fixed;
     top: 20px;
     right: 20px;
-    padding: 12px 24px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: 'Montserrat', sans-serif;
+    width: 320px;
+    border: 2px solid var(--vinotinto);
+  }
+  .panel-controles h3 { 
+    margin: 0; 
+    color: var(--vinotinto); 
+    font-size: 15px; 
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .panel-controles input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    width: 100%;
+  }
+  .panel-controles input:focus {
+    outline: none;
+    border-color: var(--dorado);
+  }
+  .btn-descarga {
+    padding: 12px;
     background-color: var(--vinotinto);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     transition: background-color 0.3s;
   }
-  .btn-descarga:hover {
-    background-color: var(--vino-oscuro);
-  }
+  .btn-descarga:hover { background-color: var(--vino-oscuro); }
 
+  /* ---------- Diseño del Certificado ---------- */
   .cover {
     width: 297mm;
     height: 210mm;
@@ -59,9 +95,10 @@
     page-break-after: always;
     font-family: "EB Garamond", Georgia, serif;
     color: var(--vino-oscuro);
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Sombra para que parezca una hoja real en tu pantalla */
   }
 
-  /* ---------- Marcos ---------- */
+  /* Marcos */
   .frame-outer {
     position: absolute; top: 8mm; left: 8mm; right: 8mm; bottom: 8mm;
     border: 1.6pt solid var(--vinotinto);
@@ -71,14 +108,14 @@
     border: 0.6pt solid var(--dorado);
   }
 
-  /* ---------- Esquinas ornamentales ---------- */
+  /* Esquinas ornamentales */
   .corner { position: absolute; width: 16mm; height: 16mm; z-index: 3; }
   .corner.tl { top: 6.5mm;  left: 6.5mm; }
   .corner.tr { top: 6.5mm;  right: 6.5mm;  transform: scaleX(-1); }
   .corner.bl { bottom: 6.5mm; left: 6.5mm; transform: scaleY(-1); }
   .corner.br { bottom: 6.5mm; right: 6.5mm; transform: scale(-1,-1); }
 
-  /* ---------- Contenido ---------- */
+  /* Contenido */
   .content {
     position: absolute;
     top: 13mm; left: 22mm; right: 22mm; bottom: 12mm;
@@ -254,10 +291,15 @@
 </head>
 <body>
 
-<!-- Botón para activar la descarga -->
-<button class="btn-descarga" onclick="descargarCertificado()">Descargar Certificado</button>
+<!-- Panel de Controles (No será capturado por el PDF) -->
+<div class="panel-controles">
+  <h3>Generador ULA</h3>
+  <input type="text" id="input-nombre" placeholder="Nombre del Estudiante" oninput="actualizarCertificado()">
+  <input type="text" id="input-tema" placeholder="Tema de la presentación" oninput="actualizarCertificado()">
+  <button class="btn-descarga" onclick="descargarCertificado()">Descargar PDF</button>
+</div>
 
-<!-- 2. Agregamos el ID "certificado-pdf" al contenedor principal -->
+<!-- Contenedor principal del certificado -->
 <div class="cover" id="certificado-pdf">
   <div class="frame-outer"></div>
   <div class="frame-inner"></div>
@@ -291,9 +333,7 @@
       <img src="logo_ula_transparent.png" alt="Logo ULA">
       <div class="header-center">
         <p class="univ">UNIVERSIDAD DE LOS ANDES</p>
-
         <p class="facultad" style="margin-bottom: 8px;">Centro de Investigación en Ciencias Humanas</p>
-        
         <p class="facultad">Departamento de Economía de la facultad de ciencias económicas y Sociales</p>
         <div class="divider">
           <span class="line"></span>
@@ -312,7 +352,10 @@
 
     <!-- Otorgamiento -->
     <p class="otorga">En reconocimiento a su compromiso con la investigación y la excelencia academica, se otorga el presente certificado a:</p>
-    <p class="nombre">Nombre del Estudiante</p>
+    
+    <!-- ID añadido para modificar el nombre con JS -->
+    <p class="nombre" id="texto-nombre">Nombre del Estudiante</p>
+    
     <div class="nombre-rule">
       <span class="line"></span>
       <span class="diamond"></span>
@@ -323,7 +366,8 @@
     <p class="cuerpo">
       Por su destacada participación en la <strong>Jornada de Investigación de
       Economía Internacional</strong>, con la presentación del tema
-      <em>«Dinamica economica entre Colombia y Venezuela»</em>, de la Facultad de Ciencias Económicas y Sociales
+      <!-- ID añadido para modificar el tema con JS -->
+      <em id="texto-tema">«Dinamica economica entre Colombia y Venezuela»</em>, de la Facultad de Ciencias Económicas y Sociales
       de la Universidad de Los Andes, Venezuela.
     </p>
 
@@ -357,24 +401,34 @@
   </div>
 </div>
 
-<!-- 3. Script para la conversión -->
+<!-- Script de Funcionalidad -->
 <script>
+  // 1. Función que actualiza el texto en tiempo real
+  function actualizarCertificado() {
+    const nombreInput = document.getElementById('input-nombre').value;
+    const temaInput = document.getElementById('input-tema').value;
+
+    // Si la casilla está vacía, coloca el texto por defecto
+    document.getElementById('texto-nombre').innerText = nombreInput || 'Nombre del Estudiante';
+    document.getElementById('texto-tema').innerText = '«' + (temaInput || 'Dinamica economica entre Colombia y Venezuela') + '»';
+  }
+
+  // 2. Función que descarga el PDF
   function descargarCertificado() {
     const elemento = document.getElementById('certificado-pdf');
+    
+    // Configuramos el nombre del archivo basado en el nombre ingresado
+    let nombreEstudiante = document.getElementById('input-nombre').value.trim();
+    if (!nombreEstudiante) nombreEstudiante = "Estudiante";
+    // Cambia los espacios por guiones bajos para el nombre del archivo (ej. Certificado_Juan_Perez.pdf)
+    const nombreArchivo = 'Certificado_' + nombreEstudiante.replace(/\s+/g, '_') + '.pdf';
 
     const opciones = {
-      margin:       0, // Sin márgenes extras, ya están en el CSS
-      filename:     'Certificado_Jornada_Economia.pdf',
+      margin:       0,
+      filename:     nombreArchivo,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { 
-        scale: 2, 
-        useCORS: true // Permite que las tipografías de Google y los logos carguen bien
-      },
-      jsPDF:        { 
-        unit: 'mm', 
-        format: 'a4', 
-        orientation: 'landscape' // Formato horizontal
-      } 
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' } 
     };
 
     html2pdf().set(opciones).from(elemento).save();
