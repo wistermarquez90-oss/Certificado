@@ -25,7 +25,7 @@
   html, body { margin: 0; padding: 0; }
   body { 
     string-set: doctitle ""; 
-    background-color: #e0e0e0; /* Fondo gris para resaltar el certificado en la pantalla */
+    background-color: #e0e0e0;
     display: flex;
     justify-content: center;
     padding: 20px;
@@ -34,7 +34,7 @@
   @page { size: A4 landscape; margin: 0; }
   @page :first { margin: 0; }
 
-  /* ---------- Panel de Controles Flotante (NO sale en el PDF) ---------- */
+  /* ---------- Panel de Controles Flotante ---------- */
   .panel-controles {
     position: fixed;
     top: 20px;
@@ -92,10 +92,9 @@
     position: relative;
     overflow: hidden;
     background: var(--marfil);
-    page-break-after: always;
     font-family: "EB Garamond", Georgia, serif;
     color: var(--vino-oscuro);
-    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Sombra para que parezca una hoja real en tu pantalla */
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); 
   }
 
   /* Marcos */
@@ -129,11 +128,13 @@
   .header {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: center; /* Esto es lo que centra los elementos verticalmente */
     justify-content: space-between;
   }
-  /* ALTURA DE LOGO DUPLICADA AQUI (de 21mm a 42mm) */
+  
+  /* Aquí le decimos a TODOS los logos del header que midan 42mm */
   .header img { height: 42mm; width: auto; }
+  
   .header-center { flex: 1; padding: 0 8mm; }
   .univ {
     font-family: "Cinzel", serif;
@@ -159,11 +160,11 @@
   .divider .line { width: 42mm; height: 0.55px; background: var(--salvia); }
   .divider .diamond {
     width: 2.1mm; height: 2.1mm; background: var(--dorado);
-      transform: rotate(45deg);
+    transform: rotate(45deg);
   }
 
   /* Título */
-  .title-block { margin-top: 8.5mm; }
+  .title-block { margin-top: 3.5mm; }
   .titulo {
     font-family: "Cinzel", serif;
     font-weight: 600;
@@ -179,7 +180,7 @@
     letter-spacing: 7px;
     text-transform: uppercase;
     color: var(--dorado-oscuro);
-    margin: 2.2mm 0 0 0;
+    margin: 1mm 0 0 0;
   }
 
   /* Otorgamiento */
@@ -188,7 +189,7 @@
     font-style: italic;
     font-size: 11.5pt;
     color: var(--vino-oscuro);
-    margin: 8mm 0 2mm 0;
+    margin: 4mm 0 2mm 0;
   }
   .nombre {
     font-family: "Great Vibes", cursive;
@@ -212,7 +213,7 @@
     font-size: 11.2pt;
     line-height: 1.68;
     max-width: 202mm;
-    margin: 7mm 0 0 0;
+    margin: 4mm 0 0 0;
     text-align: center;
     text-align-last: center;
   }
@@ -226,7 +227,18 @@
     letter-spacing: 2.2px;
     text-transform: uppercase;
     color: var(--gris-calido);
-    margin-top: 4.5mm;
+    margin-top: 3.5mm;
+  }
+
+  /* Divisor ornamental bajo la fecha */
+  .fecha-rule {
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 3.5mm; gap: 2.5mm;
+  }
+  .fecha-rule .line { width: 26mm; height: 0.55px; background: var(--salvia); }
+  .fecha-rule .diamond {
+    width: 1.8mm; height: 1.8mm; background: var(--dorado);
+    transform: rotate(45deg);
   }
 
   /* Firmas */
@@ -234,7 +246,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    margin-top: auto;
+    margin-top: auto; 
     padding: 0 12mm 1.5mm 12mm;
   }
   .firma { width: 62mm; text-align: center; }
@@ -259,40 +271,11 @@
     color: var(--vinotinto);
     margin: 0 0 0.8mm 0;
   }
-  .firma .inst {
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    font-size: 6.2pt;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
-    color: var(--gris-calido);
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  /* Sello */
-  .sello {
-    position: absolute;
-    left: 15mm; bottom: 13.5mm;
-    width: 27mm; height: 27mm;
-    z-index: 2;
-  }
-
-  /* Divisor ornamental bajo la fecha */
-  .fecha-rule {
-    display: flex; align-items: center; justify-content: center;
-    margin-top: 5.5mm; gap: 2.5mm;
-  }
-  .fecha-rule .line { width: 26mm; height: 0.55px; background: var(--salvia); }
-  .fecha-rule .diamond {
-    width: 1.8mm; height: 1.8mm; background: var(--dorado);
-    transform: rotate(45deg);
-  }
 </style>
 </head>
 <body>
 
-<!-- Panel de Controles (No será capturado por el PDF) -->
+<!-- Panel de Controles -->
 <div class="panel-controles">
   <h3>Generador ULA</h3>
   <input type="text" id="input-nombre" placeholder="Nombre del Estudiante" oninput="actualizarCertificado()">
@@ -342,8 +325,8 @@
           <span class="line"></span>
         </div>
       </div>
-      <!-- ALTURA DE LOGO DUPLICADA AQUI (de 19.5mm a 39mm) -->
-      <img src="logo_humanic_transparent.png" alt="Logo Humanic" style="height:39mm">
+      <!-- Logo tamaño idéntico al primero (ahora gobernado por el CSS) -->
+      <img src="logo_humanic_transparent.png" alt="Logo Humanic">
     </div>
 
     <!-- Título -->
@@ -368,7 +351,6 @@
     <p class="cuerpo">
       Por su destacada participación en la <strong>Jornada de Investigación de
       Economía Internacional</strong>, con la presentación del tema
-      <!-- ID añadido para modificar el tema con JS -->
       <em id="texto-tema">«Dinamica economica entre Colombia y Venezuela»</em>, de la Facultad de Ciencias Económicas y Sociales
       de la Universidad de Los Andes, Venezuela.
     </p>
@@ -405,24 +387,19 @@
 
 <!-- Script de Funcionalidad -->
 <script>
-  // 1. Función que actualiza el texto en tiempo real
   function actualizarCertificado() {
     const nombreInput = document.getElementById('input-nombre').value;
     const temaInput = document.getElementById('input-tema').value;
 
-    // Si la casilla está vacía, coloca el texto por defecto
     document.getElementById('texto-nombre').innerText = nombreInput || 'Nombre del Estudiante';
     document.getElementById('texto-tema').innerText = '«' + (temaInput || 'Dinamica economica entre Colombia y Venezuela') + '»';
   }
 
-  // 2. Función que descarga el PDF
   function descargarCertificado() {
     const elemento = document.getElementById('certificado-pdf');
     
-    // Configuramos el nombre del archivo basado en el nombre ingresado
     let nombreEstudiante = document.getElementById('input-nombre').value.trim();
     if (!nombreEstudiante) nombreEstudiante = "Estudiante";
-    // Cambia los espacios por guiones bajos para el nombre del archivo (ej. Certificado_Juan_Perez.pdf)
     const nombreArchivo = 'Certificado_' + nombreEstudiante.replace(/\s+/g, '_') + '.pdf';
 
     const opciones = {
