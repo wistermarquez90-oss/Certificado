@@ -128,12 +128,19 @@
   .header {
     width: 100%;
     display: flex;
-    align-items: center; /* Esto es lo que centra los elementos verticalmente */
+    align-items: center;
     justify-content: space-between;
   }
   
-  /* Aquí le decimos a TODOS los logos del header que midan 42mm */
-  .header img { height: 42mm; width: auto; }
+  /* NUEVO: Tamaños independientes para equilibrar el peso visual */
+  .logo-izquierdo { 
+    height: 44mm; /* Un poco más alto porque es rectangular */
+    width: auto; 
+  }
+  .logo-derecho { 
+    height: 32mm; /* Más bajo para que el círculo no se vea gigante */
+    width: auto; 
+  }
   
   .header-center { flex: 1; padding: 0 8mm; }
   .univ {
@@ -314,7 +321,7 @@
 
     <!-- Encabezado -->
     <div class="header">
-      <img src="logo_ula_transparent.png" alt="Logo ULA">
+      <img src="logo_ula_transparent.png" alt="Logo ULA" class="logo-izquierdo">
       <div class="header-center">
         <p class="univ">UNIVERSIDAD DE LOS ANDES</p>
         <p class="facultad" style="margin-bottom: 8px;">Centro de Investigación en Ciencias Humanas</p>
@@ -325,8 +332,7 @@
           <span class="line"></span>
         </div>
       </div>
-      <!-- Logo tamaño idéntico al primero (ahora gobernado por el CSS) -->
-      <img src="logo_humanic_transparent.png" alt="Logo Humanic">
+      <img src="logo_humanic_transparent.png" alt="Logo Humanic" class="logo-derecho">
     </div>
 
     <!-- Título -->
